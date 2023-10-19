@@ -1,0 +1,8 @@
+# Exclude .env file
+.env
+
+# Python-specific
+__pycache__/
+
+# IDE-specific files
+.idea/
