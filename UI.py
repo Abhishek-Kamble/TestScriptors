@@ -7,9 +7,7 @@ from PIL import Image
 # ---Package to read Docx file---#
 import docx2txt
 
-# ---Package to read PDF file---#
-import PyPDF2
-
+import backend
 
 # ----------Function to load images-----------------#
 def load_image(image_file):
@@ -23,7 +21,7 @@ def main():
             menu_title="Main Menu",
             options=["DocumentFiles", "Text", "ImageFiles"],
         )
-
+    testCases = ""
     # -------------------------------------------DocumentFiles Menu----------------------------------------------------#
     if selected == "DocumentFiles":
         st.subheader(selected)
@@ -40,12 +38,8 @@ def main():
                 elif file.type == "application/pdf":
                     try:
                         st.write("Preview")
-                        pdf_reader = PyPDF2.PdfReader(file)
-                        text = ""
-                        for i in range(len(pdf_reader.pages)):
-                            page = pdf_reader.pages[i]
-                            text += page.extract_text()
-                        st.write(text)
+                        testCases = backend.getTestCases(file)
+                        st.write(testCases)
                     except:
                         st.write("None")
                 # --------------Process DocFile-------------------#
@@ -53,7 +47,6 @@ def main():
                     raw_text = docx2txt.process(file)
                     st.write("Preview")
                     st.write(raw_text)
-
 
 
     # -------------------------------------------Text Menu---------------------------------------------------------#
