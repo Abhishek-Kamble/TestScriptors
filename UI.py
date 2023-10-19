@@ -47,11 +47,6 @@ def main():
                     raw_text = docx2txt.process(file)
                     st.write("Preview")
                     st.write(raw_text)
-                    
-                # if st.button("Export As Text File"):
-                #     with open('test-cases.txt', 'w') as out:
-                #         out.write(testCases)
-
 
 
     # -------------------------------------------Text Menu---------------------------------------------------------#
