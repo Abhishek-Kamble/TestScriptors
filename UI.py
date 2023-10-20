@@ -24,7 +24,7 @@ def main():
             options=["DocumentFiles", "Text", "ImageFiles"],
         )
 
-    # -------------------------------------------DocumentFiles Menu----------------------------------------------------#
+    # -----c--------------------------------------DocumentFiles Menu----------------------------------------------------#
     if selected == "DocumentFiles":
         st.subheader(selected)
         file = st.file_uploader("Upload Document", type=["pdf", "docx", "txt"])
