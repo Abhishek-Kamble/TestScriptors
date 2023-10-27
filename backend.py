@@ -82,3 +82,33 @@ def getTestCasesForTextPrd(txtfile):
     time.sleep(19)
     return testCases
 
+
+# ------------------Generation of TestCase via uploading Doc file----------------------------------- #
+def getTestCasesForDocPrd(txtfile):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    def getAnswer(prompt, model="gpt-3.5-turbo"):
+        messages = [{"role": "user", "content": prompt}]
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            temperature=0,  # this is the degree of randomness of the model's output
+        )
+        return response.choices[0].message["content"]
+
+    prompt = f"""Provide me the test cases which should be tagged based on the product feature,priority,severity and to be collected in respective test suites for given Product Requirement Document.
+    I will give you content of the same from each pages, beginning to end.
+    Don't be conversational. Content is shared below, delimited with triple backticks:
+    ```{txtfile}```
+    """
+    try:
+        response = getAnswer(prompt)
+    except:
+        response = getAnswer(prompt)
+    testCases=""
+    print(response)
+    testCases = testCases + ' ' + response + '\n\n'
+    time.sleep(19)
+    return testCases
+
+
