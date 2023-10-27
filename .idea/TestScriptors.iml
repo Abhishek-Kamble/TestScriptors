@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
   <component name="NewModuleRootManager">
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 3.11 (TestScriptors)" jdkType="Python SDK" />
+=======
+    <orderEntry type="jdk" jdkName="Python 3.10 (TestScriptors)" jdkType="Python SDK" />
+>>>>>>> 1a339c385779aae0e9300c1a0c4987939348a255
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
