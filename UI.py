@@ -22,14 +22,13 @@ def main():
             menu_title="Main Menu",
             options=["DocumentFiles", "Text"],
         )
-    testCases = ""
+    testcases = ""
     # -------------------------------------------DocumentFiles Menu----------------------------------------------------#
     if selected == "DocumentFiles":
         st.subheader(selected)
         file = st.file_uploader("Upload Document", type=["pdf", "docx", "txt"])
         if st.button("Process"):
             if file is not None:
-
                 # --------------Process TextFile-------------------#
                 if file.type == 'text/plain':
                     raw_text = file.read()
@@ -44,16 +43,16 @@ def main():
                         st.write("Possible TestCases")
                         # with st.spinner('Wait for it...'):
                         #     time.sleep(100)
-                        testCases = backend.getTestCasesForPdfPrd(file)
-                        st.write(testCases)
+                        testcases = backend.get_test_cases_for_pdf_prd(file)
+                        st.write(testcases)
                     except:
                         st.write("None")
                 # --------------Process DocFile-------------------#
                 else:
                     raw_text = docx2txt.process(file)
                     st.write("Possible TestCases")
-                    testCases=backend.getTestCasesForDocPrd(raw_text)
-                    st.write(testCases)
+                    testcases=backend.get_test_cases_for_doc_prd(raw_text)
+                    st.write(testcases)
 
 
 
@@ -70,8 +69,8 @@ def main():
             st.write("Possible TestCases")
             # with st.spinner('Wait for it...'):
             #     time.sleep(100)
-            testCases = backend.getTestCasesForTextPrd(txt)
-            st.write(testCases)
+            testcases = backend.get_test_cases_for_text_prd(txt)
+            st.write(testcases)
 
 
 
