@@ -52,9 +52,9 @@ def main():
                 else:
                     raw_text = docx2txt.process(file)
                     st.write("Possible TestCases")
-                    # with st.spinner('Wait for it...'):
-                    #     time.sleep(100)
-                    st.write(raw_text)
+                    testCases=backend.getTestCasesForDocPrd(raw_text)
+                    st.write(testCases)
+
 
 
     # -------------------------------------------Text Menu---------------------------------------------------------#
