@@ -1,6 +1,9 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 import time
+import backend
+import base64 
+from datetime import datetime
 
 # ----Package to load imageFile---#
 from PIL import Image
@@ -8,57 +11,69 @@ from PIL import Image
 # ---Package to read Docx file---#
 import docx2txt
 
-import backend
-
 # ----------Function to load images-----------------#
 def load_image(image_file):
     image = Image.open(image_file)
     return image
 
+def text_downloader(raw_text):
+    timestr = datetime.now().strftime("%Y%m%d-%H%M%S")
+    b64 = base64.b64encode(raw_text.encode()).decode()
+    new_filename = "testcases_{}_.txt".format(timestr)
+    st.markdown("#### Download File ###")
+    href = f'<a href="data:file/txt;base64,{b64}" download="{new_filename}">Download</a>'
+    st.markdown(href,unsafe_allow_html=True)
 
 def main():
+    st.title("Test Cases Generator")
     with st.sidebar:
         selected = option_menu(
             menu_title="Main Menu",
-            options=["DocumentFiles", "Text"],
+            options=["Document Files", "Text"],
         )
     testcases = ""
     # -------------------------------------------DocumentFiles Menu----------------------------------------------------#
-    if selected == "DocumentFiles":
-        st.subheader(selected)
-        file = st.file_uploader("Upload Document", type=["pdf", "docx", "txt"])
+    if selected == "Document Files":
+        # st.subheader(selected)
+        file = st.file_uploader("Upload PRD", type=["pdf", "docx", "txt"])
         if st.button("Process"):
             if file is not None:
                 # --------------Process TextFile-------------------#
                 if file.type == 'text/plain':
-                    raw_text = file.read()
-                    raw_text = str(file.read(), "utf-8")
-                    st.write("Possible TestCases")
-                    # with st.spinner('Wait for it...'):
-                    #     time.sleep(100)
-                    st.write(raw_text)
+                    try:
+                        raw_text = str(file.read(), "utf-8")
+                        st.write("Possible TestCases")
+                        testcases = backend.get_test_cases_for_text_prd(raw_text)
+                        text_downloader(testcases)
+                        st.write(testcases)
+                    except:
+                        st.write("None")
                 # --------------Process PdfFile-------------------#
                 elif file.type == "application/pdf":
                     try:
                         st.write("Possible TestCases")
-                        # with st.spinner('Wait for it...'):
-                        #     time.sleep(100)
                         testcases = backend.get_test_cases_for_pdf_prd(file)
+                        text_downloader(testcases)
                         st.write(testcases)
                     except:
                         st.write("None")
                 # --------------Process DocFile-------------------#
                 else:
-                    raw_text = docx2txt.process(file)
-                    st.write("Possible TestCases")
-                    testcases=backend.get_test_cases_for_doc_prd(raw_text)
-                    st.write(testcases)
+                    try:
+                        raw_text = docx2txt.process(file)
+                        st.write("Possible TestCases")
+                        testcases=backend.get_test_cases_for_doc_prd(raw_text)
+                        text_downloader(testcases)
+                        st.write(testcases)
+                    except:
+                        st.write("None")
+                    
 
 
 
     # -------------------------------------------Text Menu---------------------------------------------------------#
     elif selected == "Text":
-        st.subheader(selected)
+        # st.subheader(selected)
         txt = st.text_area(
             label="Provide PRD as a text here",
             height=200,
@@ -66,11 +81,14 @@ def main():
             placeholder="Write here...."
         )
         if st.button("Process"):
-            st.write("Possible TestCases")
-            # with st.spinner('Wait for it...'):
-            #     time.sleep(100)
-            testcases = backend.get_test_cases_for_text_prd(txt)
-            st.write(testcases)
+            try:
+                st.write("Possible TestCases")
+                testcases = backend.get_test_cases_for_text_prd(txt)
+                text_downloader(testcases)
+                st.write(testcases)
+            except:
+                st.write("None")
+            
 
 
 
