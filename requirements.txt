@@ -1,0 +1,6 @@
+streamlit 
+streamlit_option_menu 
+docx2txt 
+pypdf 
+openai 
+python-dotenv

@@ -1,31 +1,76 @@
-# Test cases generator
+![Logo](https://abhishekkamble.s3.ap-south-1.amazonaws.com/portfolio-images/testlogo.png)
 
-Test cases generator application is developed using python.
+# TestScriptors - AFourathon 4.0
 
-## Installation
+Test Case Generator is a robust application for generating test cases using AI in few seconds.
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install required libraries.
+## Screenshots
+
+![App Screenshot](https://abhishekkamble.s3.ap-south-1.amazonaws.com/portfolio-images/TestScriptors.png)
+
+## Run Locally
+
+Clone the project
 
 ```bash
-pip install streamlit
-pip install streamlit_option_menu
-pip install docx2txt
-pip install pypdf
-pip install openai
-pip install python-dotenv
+git clone https://github.com/Abhishek-Kamble/TestScriptors.git
 ```
 
-## Usage
-[ Generate openai API key and copy it](https://platform.openai.com/account/api-keys)
+Go to the project directory
 
-Create a .env file in the root directory.
+```bash
+cd TestScriptors
+```
 
-Add this environment variable - OPENAI_API_KEY and assign copied API key to this variable.
+Install dependencies
 
-Run following command in terminal.
+```bash
+pip install -r requirements.txt
+```
+
+Start the application
 
 ```bash
 streamlit run UI.py
 ```
 
-Application will be opened in the browser, if not opened, copy the URL provided in the terminal and paste in the browser's new tab.
+Open the URL in a browser
+
+```bash
+http://localhost:8501/
+```
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`OPENAI_API_KEY`
+
+## Tech Stack
+
+**Client:** Streamlit
+
+**Server:** Python, OpenAI API (GPT turbo 3.5), Natural Language Processing (NLP)
+
+## Demo
+
+TODO Insert gif or link to demo
+
+## Documentation
+
+TODO
+[Documentation](https://linktodocumentation)
+
+## Authors
+
+- [@Abhishek-Kamble](https://www.github.com/Abhishek-Kamble)
+
+- [@smgalagali](https://github.com/smgalagali)
+
+- [@shreyashgaste](https://github.com/shreyashgaste)
+
+- [@Udayraj2806](https://github.com/Udayraj2806)
+
+## Support & Feedback
+
+If you have any feedback or need any support, please reach out to us at abhishekk0358@gmail.com
