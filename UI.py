@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import time
 import backend
-import base64 
+import base64
 from datetime import datetime
 
 # ----Package to load imageFile---#
@@ -22,7 +22,7 @@ def text_downloader(raw_text):
     new_filename = "testcases_{}_.txt".format(timestr)
     st.markdown("#### Download File ###")
     href = f'<a href="data:file/txt;base64,{b64}" download="{new_filename}">Download</a>'
-    st.markdown(href,unsafe_allow_html=True)
+    st.markdown(href, unsafe_allow_html=True)
 
 def main():
     st.title("Test Cases Generator")
@@ -31,7 +31,16 @@ def main():
             menu_title="Main Menu",
             options=["Document Files", "Text"],
         )
-    testcases = ""
+
+    # Create a session state dictionary
+    session_state = st.session_state
+    if not hasattr(session_state, 'testcases'):
+        session_state.testcases = ""
+    additional_testcases = ""
+
+    # Initialize the elaborated test case
+    elaborated_testcase = ""
+
     # -------------------------------------------DocumentFiles Menu----------------------------------------------------#
     if selected == "Document Files":
         # st.subheader(selected)
@@ -43,18 +52,18 @@ def main():
                     try:
                         raw_text = str(file.read(), "utf-8")
                         st.write("Possible TestCases")
-                        testcases = backend.get_test_cases_for_text_prd(raw_text)
-                        text_downloader(testcases)
-                        st.write(testcases)
+                        session_state.testcases = backend.get_test_cases_for_text_prd(raw_text)
+                        # text_downloader(session_state.testcases)
+                        # st.write(session_state.testcases)
                     except:
                         st.write("None")
                 # --------------Process PdfFile-------------------#
                 elif file.type == "application/pdf":
                     try:
                         st.write("Possible TestCases")
-                        testcases = backend.get_test_cases_for_pdf_prd(file)
-                        text_downloader(testcases)
-                        st.write(testcases)
+                        session_state.testcases = backend.get_test_cases_for_pdf_prd(file)
+                        # text_downloader(session_state.testcases)
+                        # st.write(session_state.testcases)
                     except:
                         st.write("None")
                 # --------------Process DocFile-------------------#
@@ -62,14 +71,11 @@ def main():
                     try:
                         raw_text = docx2txt.process(file)
                         st.write("Possible TestCases")
-                        testcases=backend.get_test_cases_for_doc_prd(raw_text)
-                        text_downloader(testcases)
-                        st.write(testcases)
+                        session_state.testcases = backend.get_test_cases_for_doc_prd(raw_text)
+                        # text_downloader(session_state.testcases)
+                        # st.write(session_state.testcases)
                     except:
                         st.write("None")
-                    
-
-
 
     # -------------------------------------------Text Menu---------------------------------------------------------#
     elif selected == "Text":
@@ -83,25 +89,27 @@ def main():
         if st.button("Process"):
             try:
                 st.write("Possible TestCases")
-                testcases = backend.get_test_cases_for_text_prd(txt)
-                text_downloader(testcases)
-                st.write(testcases)
+                session_state.testcases = backend.get_test_cases_for_text_prd(txt)
+                    # text_downloader(additional_testcases)
+                    # st.write(additional_testcases)
             except:
                 st.write("None")
+
+    with st.form("testcases_form"):
+        if session_state.testcases:
+            st.markdown("#### Generated Test Cases ###")
+            text_downloader(session_state.testcases)
+            st.write(session_state.testcases)
+
+            st.title("Additional Prompt")
+            user_input = st.text_input("Enter your query...", "")
             
+            if st.form_submit_button("Elaborate on Test Case"):
+                elaborated_testcase = backend.get_custom_test_cases(session_state.testcases, user_input)
 
-
-
-
-    # ------------------------------------------ImageFiles Menu-----------------------------------------------------#
-    # elif selected == "ImageFiles":
-    #     st.subheader(selected)
-    #     image_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg"])
-    #     if st.button("Process"):
-    #         st.write("Preview")
-    #         if image_file:
-    #             st.image(load_image(image_file))
-
+    if elaborated_testcase:
+        st.markdown("#### Elaborated Test Case ###")
+        st.write(elaborated_testcase)
 
 if __name__ == '__main__':
     main()

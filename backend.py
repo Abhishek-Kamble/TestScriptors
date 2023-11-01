@@ -6,7 +6,13 @@ import openai
 
 load_dotenv()
 
-def get_test_cases(new_text):
+
+prompt1 = """Provide me the test cases which should be tagged based on the product feature, priority, severity and 
+        to be collected in respective test suites for given Product Requirement Document.
+        I will give you content of the same from each pages, beginning to end.
+        Don't be conversational. Content is shared below, delimited with triple backticks:"""
+        
+def get_test_cases(new_text, prompt_input):
     openai.api_key  = os.getenv("OPENAI_API_KEY")
     testcases = ''
     def get_answer(prompt, model="gpt-3.5-turbo"):
@@ -16,21 +22,17 @@ def get_test_cases(new_text):
         messages=messages,
         temperature=0, # this is the degree of randomness of the model's output
         )
+        # print(response)
         return response.choices[0].message["content"]
 
     for i in range(0, len(new_text)):
-        prompt = f"""Provide me the test cases which should be tagged based on the product feature, priority, severity and 
-        to be collected in respective test suites for given Product Requirement Document.
-        I will give you content of the same from each pages, beginning to end.
-        Don't be conversational. Content is shared below, delimited with triple backticks:
-        ```{new_text[i]}```
-        """
+        prompt = f"{prompt_input}```{new_text[i]}```"
         try:
             response = get_answer(prompt)
         except:
             response = get_answer(prompt)
         testcases = testcases + ' ' + response + '\n\n'
-        time.sleep(19)
+        time.sleep(1)
     return testcases
 
 # ------------------Generation of TestCase via uploading pdf file----------------------------------- #
@@ -51,7 +53,7 @@ def get_test_cases_for_pdf_prd(pdfFileObject):
         return new_text
 
     new_text = join_multiple_pages(text, 3)
-    return get_test_cases(new_text)
+    return get_test_cases(new_text, prompt1)
 
 
 def get_tokens(input_string):
@@ -75,10 +77,15 @@ def get_tokens(input_string):
 # ------------------Generation of TestCase via uploading using text file----------------------------------- #
 def get_test_cases_for_text_prd(txtfile):
     new_text = get_tokens(txtfile)
-    return get_test_cases(new_text)
+    return get_test_cases(new_text, prompt1)
 
 
 # ------------------Generation of TestCase via uploading Doc file----------------------------------- #
 def get_test_cases_for_doc_prd(txtfile):
     new_text = get_tokens(txtfile)
-    return get_test_cases(new_text)
+    return get_test_cases(new_text, prompt1)
+
+def get_custom_test_cases(tetcases, prompt):
+    new_text = get_tokens(tetcases)
+    return get_test_cases(new_text, prompt)
+    
